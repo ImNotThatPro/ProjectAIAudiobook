@@ -1,76 +1,448 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Drag & Drop File Box</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI AudioBook — Upload</title>
+  <meta name="description" content="Upload EPUB, PDF, or TXT files to generate audiobooks. Clean, smooth, browser-optimized interface." />
+
   <style>
-    body {
-      font-family: sans-serif;
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa4b2;--accent:#4f46e5;--glass: rgba(255,255,255,0.04)}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; background:linear-gradient(180deg,#071023 0%, #071020 60%); color:#e6eef8; -webkit-font-smoothing:antialiased}
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--card);
+      box-shadow: 0 2px 16px rgba(15,23,42,0.13);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
       display: flex;
-      justify-content: center;
       align-items: center;
-      height: 100vh;
-      background: #f0f0f0;
+      min-height: 58px;
     }
-    #drop-zone {
-      width: 400px;
-      height: 200px;
-      border: 3px dashed #888;
+    .topbar-logo {
+      width: 44px;
+      height: 44px;
+      margin-left: 16px;
+      margin-right: 12px;
       border-radius: 10px;
       background: #fff;
+      opacity: 0.9;
+      box-shadow: 0 1px 4px rgba(15,23,42,0.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .topbar .tabs {
+      margin: 0 0 0 24px;
+    }
+    .topbar .small {
+      margin-left: auto;
+      margin-right: 24px;
+    }
+    .wrap {
+      max-width:980px;
+      margin: 36px auto;
+      padding: 24px;
+      padding-top: 90px;
+    }
+    @media (max-width:640px){
+      .topbar-logo { width: 36px; height: 36px; margin-left: 4px; margin-right: 6px; }
+      .topbar .tabs { margin-left: 8px; }
+      .topbar .small { margin-right: 8px; }
+      .wrap { padding-top: 110px; }
+    }
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#6366f1,#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:700;color:white;box-shadow:0 6px 18px rgba(15,23,42,0.6)}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:4px 0 0;color:var(--muted);font-size:13px}
+    .card{background:var(--card);border-radius:14px;padding:18px;backdrop-filter: blur(6px);box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    .tabs{display:flex;background:var(--glass);padding:6px;border-radius:10px}
+    .tab{padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;color:var(--muted)}
+    .tab.active{background:linear-gradient(90deg,rgba(255,255,255,0.04), rgba(255,255,255,0.02));color:white;box-shadow:inset 0 -2px 0 rgba(255,255,255,0.02)}
+    .field{margin-bottom:12px}
+    label{display:block;font-size:13px;margin-bottom:6px;color:var(--muted)}
+    input[type=text], input[type=url], input[type=file], textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit;font-size:14px}
+    input[type=file]{display:block}
+    .row{display:flex;gap:12px}
+    .row > *{flex:1}
+    .actions{display:flex;gap:10px;align-items:center}
+    button{background:var(--accent);border:none;color:white;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+    .preview{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-top:12px}
+    .qcard{background:linear-gradient(180deg,#091022,#071017);padding:14px;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:10px;min-width:220px}
+    .qimg{width:220px;height:220px;background:white;padding:12px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+    .meta{font-size:13px;color:var(--muted);text-align:center}
+    footer{margin-top:16px;color:var(--muted);font-size:13px}
+    .hint{font-size:12px;color:#9bb0c8}
+    .small{font-size:12px;color:var(--muted)}
+    .notice{background:rgba(79,70,229,0.06);padding:10px;border-radius:8px;color:#dfe8ff;border:1px solid rgba(79,70,229,0.12);font-size:13px}
+    @media (max-width:640px){.row{flex-direction:column}.qimg{width:180px;height:180px}}
+    .guide-section {
+      max-width: 700px;
+      margin: 40px auto 32px auto;
+      padding: 0 16px;
+    }
+    .guide-card {
+      background: var(--card);
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(2,6,23,0.13);
+      padding: 28px 22px 22px 22px;
+      color: #e6eef8;
+    }
+    .guide-card h2 {
+      margin-top: 0;
+      font-size: 20px;
+      color: #fff;
+      letter-spacing: 0.01em;
+    }
+    .guide-card ol {
+      margin: 16px 0 0 18px;
+      padding: 0;
+      font-size: 15px;
+    }
+    .guide-card ul {
+      margin: 6px 0 0 18px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    @media (max-width:640px){
+      .guide-card { padding: 18px 8px 14px 8px; }
+      .guide-section { margin: 28px auto 18px auto; }
+    }
+    .bottom-info-section {
+      max-width: 800px;
+      margin: 48px auto 32px auto;
+      padding: 0 16px;
+    }
+    .bottom-info-card {
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: 0 4px 32px rgba(2,6,23,0.13);
+      padding: 36px 28px 28px 28px;
+      color: #e6eef8;
       text-align: center;
-      line-height: 200px;
-      color: #555;
-      transition: background 0.3s;
     }
-    #drop-zone.dragover {
-      background: #e0ffe0;
-      color: #222;
+    .bottom-info-card h2 {
+      margin-top: 0;
+      font-size: 22px;
+      color: #fff;
+      letter-spacing: 0.01em;
+      margin-bottom: 14px;
     }
-    #file-list {
-      margin-top: 20px;
+    .bottom-info-card a {
+      color: #60a5fa;
+      text-decoration: underline;
+      font-weight: 500;
+      transition: color 0.2s;
+      font-size: 17px;
+    }
+    .bottom-info-card a:hover {
+      color: #a5b4fc;
+    }
+    .bottom-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    @media (max-width:640px){
+      .bottom-info-card { padding: 18px 8px 14px 8px; }
+      .bottom-info-section { margin: 28px auto 18px auto; }
+    }
+    .color-switcher {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 18px;
+      margin-left: 12px;
+    }
+    .color-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      outline: none;
+      cursor: pointer;
+      transition: border 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(15,23,42,0.10);
+      padding: 0;
+    }
+    .color-btn.selected, .color-btn:focus {
+      border: 2.5px solid #6366f1;
+      box-shadow: 0 0 0 2px #6366f133;
+    }
+    @media (max-width:640px){
+      .color-switcher { margin-right: 4px; }
+      .color-btn { width: 22px; height: 22px; }
+    }
+    .drop-area {
+      border: 2px dashed var(--muted, #9aa4b2);
+      border-radius: 10px;
+      padding: 28px 0;
+      text-align: center;
+      background: var(--glass, rgba(255,255,255,0.04));
+      color: var(--muted, #9aa4b2);
+      font-size: 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .drop-area.dragover {
+      border-color: var(--accent, #4f46e5);
+      background: rgba(99,102,241,0.08);
+      color: var(--accent, #4f46e5);
+    }
+    .drop-area input[type="file"] {
+      display: none;
+    }
+    @media (max-width:640px){
+      .drop-area { font-size: 14px; padding: 18px 0; }
     }
   </style>
 </head>
 <body>
+  <div class="topbar">
+    <div class="topbar-logo" aria-label="Logo placeholder"></div>
+    <div class="tabs" role="tablist" aria-label="Choose type">
+      <div class="tab active" data-type="upload">Upload</div>
+      <div class="tab" data-type="library">Library</div>
+      <div class="tab" data-type="about">About</div>
+    </div>
+    <div class="small">Works on desktop & mobile</div>
+    <div class="color-switcher" title="Change color theme">
+      <button class="color-btn" data-theme="default" aria-label="Default theme" style="background:linear-gradient(180deg,#071023 0%, #071020 60%);"></button>
+      <button class="color-btn" data-theme="white" aria-label="White theme" style="background:#fff;border:1px solid #e5e7eb"></button>
+      <button class="color-btn" data-theme="black" aria-label="Black theme" style="background:#000;"></button>
+    </div>
+    <div class="topbar-auth-dropdown" tabindex="0">
+      <span class="auth-icon" aria-label="Account"></span>
+      <div class="auth-dropdown-menu">
+        <button class="auth-btn" id="auth-login-btn">Login</button>
+        <button class="auth-btn" id="auth-register-btn">Register</button>
+      </div>
+    </div>
+  </div>
 
-  <div id="drop-zone">Drag EPUB, PDF, or TXT files here</div>
-  <ul id="file-list"></ul>
+  <div class="wrap">
+    <header>
+      <div class="logo">AI</div>
+      <div>
+        <h1>AI AudioBook — Upload Your Book</h1>
+        <p class="lead">Upload EPUB, PDF, or TXT files to generate audiobooks. Clean, smooth, browser-optimized interface.</p>
+      </div>
+    </header>
+
+    <div class="card">
+      <!-- Upload panel -->
+      <div id="panel-upload" class="panel">
+        <div class="field">
+          <label>Upload your book file (EPUB, PDF, or TXT)</label>
+          <div id="drop-area" class="drop-area">
+            <span id="drop-area-text">Drop EPUB, PDF, or TXT files here or <span id="choose-file-link" style="color:#4f46e5;cursor:pointer;text-decoration:underline;">press here</span></span>
+            <input id="input-file" type="file" accept=".epub,.pdf,.txt" style="display:none" />
+          </div>
+          <div class="hint" id="file-hint">
+            Supported formats: EPUB, PDF, TXT. Max size: 50MB.
+          </div>
+          <div class="file-error" id="file-error" style="display:none"></div>
+        </div>
+        <div class="field row">
+          <button id="btn-upload" disabled>Upload</button>
+          <button class="ghost" id="btn-clear">Clear</button>
+        </div>
+        <ul id="file-list" style="margin-top:12px"></ul>
+      </div>
+
+      <!-- Library panel -->
+      <div id="panel-library" class="panel" style="display:none">
+        <div class="field">
+          <label>Your uploaded audiobooks will appear here.</label>
+        </div>
+        <div class="hint">No books yet.</div>
+      </div>
+
+      <!-- About panel -->
+      <div id="panel-about" class="panel" style="display:none">
+        <div class="field">
+          <label>About AI AudioBook</label>
+          <div class="hint">
+            This tool lets you upload your book files and generate audiobooks using AI. All processing happens securely in your browser or on our servers.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simple Guide Section -->
+  <section class="guide-section">
+    <div class="guide-card">
+      <h2>How to Use AI AudioBook</h2>
+      <ol>
+        <li><strong>Choose a tab:</strong> Upload, Library, or About.</li>
+        <li><strong>Upload:</strong> Drag and drop your EPUB, PDF, or TXT file, or click <b>press here</b> to select.</li>
+        <li><strong>Wait for processing:</strong> Your file will be prepared for audiobook generation.</li>
+        <li><strong>Listen or download:</strong> Once ready, your audiobooks will appear in the Library tab.</li>
+      </ol>
+      <p class="small" style="margin-top:12px;color:var(--muted)">
+        <b>Tip:</b> For best results, use clean, well-formatted files. Large files may take longer to process.
+      </p>
+    </div>
+  </section>
+
+  <!-- Persistent Bottom Info Section -->
+  <section class="bottom-info-section">
+    <div class="bottom-info-card">
+      <h2>🌐 More from Our Team</h2>
+      <p>
+        <a href="#" target="_blank">Company Website</a> &nbsp;|&nbsp;
+        <a href="#" target="_blank">Blog</a> &nbsp;|&nbsp;
+        <a href="#" target="_blank">Contact</a>
+      </p>
+      <p class="bottom-note">
+        Stay tuned for updates, new features, and more tools coming soon!
+      </p>
+    </div>
+  </section>
 
   <script>
-    const dropZone = document.getElementById('drop-zone');
+    // Theme switching logic (UI only)
+    const themes = {
+      default: {
+        '--bg': '#0f1724',
+        '--card': '#0b1220',
+        '--muted': '#9aa4b2',
+        '--accent': '#4f46e5',
+        '--glass': 'rgba(255,255,255,0.04)',
+        bodyBg: 'linear-gradient(180deg,#071023 0%, #071020 60%)',
+        text: '#e6eef8'
+      },
+      white: {
+        '--bg': '#f8fafc',
+        '--card': '#fff',
+        '--muted': '#64748b',
+        '--accent': '#6366f1',
+        '--glass': 'rgba(0,0,0,0.03)',
+        bodyBg: '#fff',
+        text: '#222'
+      },
+      black: {
+        '--bg': '#000',
+        '--card': '#18181b',
+        '--muted': '#a1a1aa',
+        '--accent': '#6366f1',
+        '--glass': 'rgba(255,255,255,0.03)',
+        bodyBg: '#000',
+        text: '#f4f4f5'
+      }
+    };
+    function setTheme(theme) {
+      const t = themes[theme] || themes.default;
+      for (const key in t) {
+        if (key.startsWith('--')) {
+          document.documentElement.style.setProperty(key, t[key]);
+        }
+      }
+      document.body.style.background = t.bodyBg;
+      document.body.style.color = t.text;
+      document.querySelectorAll('.card,.guide-card,.bottom-info-card').forEach(el=>{
+        el.style.color = t.text;
+      });
+      document.querySelectorAll('.color-btn').forEach(btn=>{
+        btn.classList.toggle('selected', btn.dataset.theme === theme);
+      });
+    }
+    document.querySelectorAll('.color-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        setTheme(btn.dataset.theme);
+        localStorage.setItem('aiaudiobook_theme', btn.dataset.theme);
+      });
+    });
+    setTheme(localStorage.getItem('aiaudiobook_theme') || 'default');
+
+    // Tab switching (UI only)
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(t => t.addEventListener('click', ()=>{
+      tabs.forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      const type = t.dataset.type;
+      document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
+      document.getElementById('panel-'+type).style.display='block';
+    }));
+
+    // Drop area UI (no upload logic)
+    const dropArea = document.getElementById('drop-area');
+    const inputFile = document.getElementById('input-file');
+    const dropAreaText = document.getElementById('drop-area-text');
+    const chooseFileLink = document.getElementById('choose-file-link');
+    const btnUpload = document.getElementById('btn-upload');
+    const btnClear = document.getElementById('btn-clear');
     const fileList = document.getElementById('file-list');
+    const fileError = document.getElementById('file-error');
+    const fileHint = document.getElementById('file-hint');
 
-    dropZone.addEventListener('dragover', (e) => {
+    dropArea.onclick = (e) => {
+      inputFile.click();
+    };
+    chooseFileLink.onclick = (e) => {
+      e.stopPropagation();
+      inputFile.click();
+    };
+    dropArea.ondragover = (e) => {
       e.preventDefault();
-      dropZone.classList.add('dragover');
-    });
-
-    dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('dragover');
-    });
-
-    dropZone.addEventListener('drop', (e) => {
+      dropArea.classList.add('dragover');
+      dropAreaText.textContent = "Drop your file here";
+    };
+    dropArea.ondragleave = (e) => {
       e.preventDefault();
-      dropZone.classList.remove('dragover');
-      const files = Array.from(e.dataTransfer.files);
-
-      fileList.innerHTML = ''; // Clear previous list
-
-      files.forEach(file => {
+      dropArea.classList.remove('dragover');
+      dropAreaText.innerHTML = 'Drop EPUB, PDF, or TXT files here or <span id="choose-file-link" style="color:#4f46e5;cursor:pointer;text-decoration:underline;">press here</span>';
+      document.getElementById('choose-file-link').onclick = (e) => { e.stopPropagation(); inputFile.click(); };
+    };
+    dropArea.ondrop = (e) => {
+      e.preventDefault();
+      dropArea.classList.remove('dragover');
+      dropAreaText.innerHTML = 'Drop EPUB, PDF, or TXT files here or <span id="choose-file-link" style="color:#4f46e5;cursor:pointer;text-decoration:underline;">press here</span>';
+      document.getElementById('choose-file-link').onclick = (e) => { e.stopPropagation(); inputFile.click(); };
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        inputFile.files = e.dataTransfer.files;
+        showFileList();
+      }
+    };
+    inputFile.onchange = () => {
+      showFileList();
+    };
+    function showFileList() {
+      fileList.innerHTML = '';
+      fileError.style.display = "none";
+      btnUpload.disabled = true;
+      if (inputFile.files && inputFile.files.length > 0) {
+        const file = inputFile.files[0];
         const ext = file.name.split('.').pop().toLowerCase();
         if (['epub', 'pdf', 'txt'].includes(ext)) {
           const li = document.createElement('li');
           li.textContent = `✅ ${file.name}`;
           fileList.appendChild(li);
+          btnUpload.disabled = false;
         } else {
           const li = document.createElement('li');
           li.textContent = `❌ ${file.name} (unsupported type)`;
           fileList.appendChild(li);
+          fileError.textContent = "Unsupported file type.";
+          fileError.style.display = "block";
         }
-      });
-    });
+      }
+    }
+    btnClear.onclick = () => {
+      inputFile.value = '';
+      fileList.innerHTML = '';
+      btnUpload.disabled = true;
+      fileError.style.display = "none";
+      dropAreaText.innerHTML = 'Drop EPUB, PDF, or TXT files here or <span id="choose-file-link" style="color:#4f46e5;cursor:pointer;text-decoration:underline;">press here</span>';
+      document.getElementById('choose-file-link').onclick = (e) => { e.stopPropagation(); inputFile.click(); };
+    };
   </script>
-
 </body>
 </html>
