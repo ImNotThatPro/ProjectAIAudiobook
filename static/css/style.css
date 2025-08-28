@@ -1,4 +1,4 @@
-<style>
+
     :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa4b2;--accent:#4f46e5;--glass: rgba(255,255,255,0.04)}
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -193,4 +193,3 @@
     @media (max-width:640px){
       .drop-area { font-size: 14px; padding: 18px 0; }
     }
-  </style>
