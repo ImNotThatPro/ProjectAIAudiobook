@@ -4,6 +4,8 @@ from gtts import gTTS
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import FileResponse
+
 app = FastAPI()
 
 UPLOAD_DIR = 'uploads'
@@ -13,7 +15,11 @@ os.makedirs(AUDIO_DIR, exist_ok = True)
 
 app.mount('/uploads', StaticFiles(directory=UPLOAD_DIR), name= 'uploads')
 app.mount('/audio', StaticFiles(directory=AUDIO_DIR), name = 'audio')
+#IMPORTANT TAKE THIS TO YOUR FRONT END LOCATION INSIDE DIRECTORY IN ORDER TO WORK
+app.mount('/static', StaticFiles(directory='C:/Users/duong/.vscode/VS Projects/ProjectAIAudioBook_front/static'), name = 'static')
 
+
+#Uhh getting file from the front end when people drop or choose file and then send it here
 @app.post('/upload')
 async def upload_file(file: UploadFile = File(...)):
     file_location = os.path.join(UPLOAD_DIR, file.filename)
@@ -22,6 +28,7 @@ async def upload_file(file: UploadFile = File(...)):
     url = f'/uploads/{file.filename}'
     return JSONResponse({'filename': file.filename, 'url': url, 'status': 'received'})
 
+#Generate audio type shit
 @app.post('/generate_audio')
 async def generate_audio(data: dict = Body(...)):
     url = data.get('url')
@@ -51,6 +58,8 @@ async def generate_audio(data: dict = Body(...)):
     audio_url = f'/audio/{audio_filename}'
     return {'audio_url': audio_url}
 
+
+#Sth sth about CORSM that for now i don't understand
 app.add_middleware(
     CORSMiddleware,
     allow_origins = ['*'],
@@ -59,6 +68,8 @@ app.add_middleware(
     allow_headers = ['*']
 )
 
+
+#Creating a local running website
 @app.get('/')
-def root():
-    return {'message': 'Hello from AI audiobook project'}
+def home():
+    return FileResponse('C:/Users/duong/.vscode/VS Projects/ProjectAIAudioBook_front/frontend.html')
