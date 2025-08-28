@@ -1,13 +1,13 @@
 import os, requests, re
 from fastapi import FastAPI, File, UploadFile, Body
 from gtts import gTTS
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.responses import FileResponse
 
 app = FastAPI()
-
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # one level up from backend/
+FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 UPLOAD_DIR = 'uploads'
 AUDIO_DIR = 'audio'
 os.makedirs(UPLOAD_DIR, exist_ok= True)
@@ -16,7 +16,7 @@ os.makedirs(AUDIO_DIR, exist_ok = True)
 app.mount('/uploads', StaticFiles(directory=UPLOAD_DIR), name= 'uploads')
 app.mount('/audio', StaticFiles(directory=AUDIO_DIR), name = 'audio')
 #IMPORTANT TAKE THIS TO YOUR FRONT END LOCATION INSIDE DIRECTORY IN ORDER TO WORK
-app.mount('/static', StaticFiles(directory='C:/Users/duong/.vscode/VS Projects/ProjectAIAudioBook_front/static'), name = 'static')
+app.mount('/static', StaticFiles(directory='static'), name = 'static')
 
 
 #Uhh getting file from the front end when people drop or choose file and then send it here
@@ -71,5 +71,8 @@ app.add_middleware(
 
 #Creating a local running website
 @app.get('/')
-def home():
-    return FileResponse('C:/Users/duong/.vscode/VS Projects/ProjectAIAudioBook_front/frontend.html  ')
+def serve_index():
+    file_path = os.path.join(FRONTEND_DIR, 'frontend.html')
+    if not os.path.exists(file_path):
+        raise RuntimeError(f'File not found: {file_path}')
+    return FileResponse(file_path)
