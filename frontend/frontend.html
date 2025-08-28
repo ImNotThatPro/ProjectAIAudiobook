@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI AudioBook — Upload</title>
+  <meta name="description" content="Upload EPUB, PDF, or TXT files to generate audiobooks. Clean, smooth, browser-optimized interface." />
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-logo" aria-label="Logo placeholder">AI</div>
+    <div class="tabs" role="tablist" aria-label="Choose type">
+      <div class="tab active" data-type="upload">Upload</div>
+      <div class="tab" data-type="library">Library</div>
+      <div class="tab" data-type="about">About</div>
+    </div>
+    <div class="small">Works on desktop & mobile</div>
+    <div class="color-switcher" title="Change color theme">
+      <button class="color-btn" data-theme="default" aria-label="Default theme" style="background:linear-gradient(180deg,#071023 0%, #071020 60%);"></button>
+      <button class="color-btn" data-theme="white" aria-label="White theme" style="background:#fff;border:1px solid #e5e7eb"></button>
+      <button class="color-btn" data-theme="black" aria-label="Black theme" style="background:#000;"></button>
+      <button id="pickerBtn" class="color-btn" data-theme="picker" style="background: linear-gradient(135deg,#6366f1,#06b6d4)"></button>
+      <input type="color" id="colorPicker" style="display:none">
+    </div>
+    <div class="topbar-auth-dropdown" tabindex="0">
+      <span class="auth-icon" aria-label="Account"></span>
+      <div class="auth-dropdown-menu">
+        <button class="auth-btn" id="auth-login-btn">Login</button>
+        <button class="auth-btn" id="auth-register-btn">Register</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header>
+      <div class="logo">AI</div>
+      <div>
+        <h1>AI AudioBook — Upload Your Book</h1>
+        <p class="lead">Upload EPUB, PDF, or TXT files to generate audiobooks. Clean, smooth, browser-optimized interface.</p>
+      </div>
+    </header>
+
+    <div class="card">
+      <!-- Upload panel -->
+      <div id="panel-upload" class="panel">
+        <div class="field">
+          <label>Upload your book file (EPUB, PDF, or TXT)</label>
+          <div id="drop-area" class="drop-area">
+            <span id="drop-area-text">Drop EPUB, PDF, or TXT files here or <span id="choose-file-link" style="color:#4f46e5;cursor:pointer;text-decoration:underline;">press here</span></span>
+            <input id="input-file" type="file" accept=".epub,.pdf,.txt" style="display:none" />
+          </div>
+          <div class="hint" id="file-hint">
+            Supported formats: EPUB, PDF, TXT. Max size: 50MB.
+          </div>
+          <div class="file-error" id="file-error" style="display:none"></div>
+        </div>
+        <div class="field row">
+          <button id="btn-upload" disabled>Upload</button>
+          <button class="ghost" id="btn-clear">Clear</button>
+          <button id="btn-generate-audio" disabled>Generate Audio</button>
+        </div>
+        <ul id="file-list" style="margin-top:12px"></ul>
+      </div>
+
+      <!-- Library panel -->
+      <div id="panel-library" class="panel" style="display:none">
+        <div class="field">
+          <label>Your uploaded audiobooks will appear here.</label>
+        </div>
+        <div class="hint">No books yet.</div>
+      </div>
+
+      <!-- About panel -->
+      <div id="panel-about" class="panel" style="display:none">
+        <div class="field">
+          <label>About AI AudioBook</label>
+          <div class="hint">
+            This tool lets you upload your book files and generate audiobooks using AI. All processing happens securely in your browser or on our servers.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simple Guide Section -->
+  <section class="guide-section">
+    <div class="guide-card">
+      <h2>How to Use AI AudioBook</h2>
+      <ol>
+        <li><strong>Choose a tab:</strong> Upload, Library, or About.</li>
+        <li><strong>Upload:</strong> Drag and drop your EPUB, PDF, or TXT file, or click <b>press here</b> to select.</li>
+        <li><strong>Wait for processing:</strong> Your file will be prepared for audiobook generation.</li>
+        <li><strong>Listen or download:</strong> Once ready, your audiobooks will appear in the Library tab.</li>
+      </ol>
+      <p class="small" style="margin-top:12px;color:var(--muted)">
+        <b>Tip:</b> For best results, use clean, well-formatted files. Large files may take longer to process.
+      </p>
+    </div>
+  </section>
+
+  <!-- Persistent Bottom Info Section -->
+  <section class="bottom-info-section">
+    <div class="bottom-info-card">
+      <h2>🌐 More from Our Team</h2>
+      <p>
+        <a href="#" target="_blank">Company Website</a> &nbsp;|&nbsp;
+        <a href="#" target="_blank">Blog</a> &nbsp;|&nbsp;
+        <a href="#" target="_blank">Contact</a>
+      </p>
+      <p class="bottom-note">
+        Stay tuned for updates, new features, and more tools coming soon!
+      </p>
+    </div>
+  </section>
+<script src = '/static/js/script.js'></script>
+</body>
+</html>
