@@ -59,7 +59,7 @@ async def generate_audio(data: dict = Body(...)):
     return {'audio_url': audio_url}
 
 
-#Sth sth about CORSM that for now i don't understand
+#Sth sth about CORSMiddleware that for now i don't understand
 app.add_middleware(
     CORSMiddleware,
     allow_origins = ['*'],
