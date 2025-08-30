@@ -12,9 +12,9 @@
         '--bg': '#a8f3ff',
         '--card': 'linear-gradient(190deg,#e8e6e6 30%, #2b2b2b 60%) no-repeat fixed center / 500% 500%',
         '--muted': '#242424',
-        '--accent': '#6366f1',
+        '--accent': '#2e3135ff',
         '--glass': 'rgba(168, 243, 255,0.03)',
-        bodyBg: "linear-gradient(90deg,#e8e6e6 30%, #2b2b2b 60%) no-repeat fixed center / 500% 500%",
+        bodyBg: "linear-gradient(90deg, #2b2b2b 0%, #2b2b2b 40%, #e8e8e8 50%, #2b2b2b 60%, #2b2b2b 100%) no-repeat fixed center / 500% 500%",
         text: '#222'
       },
       black: {
