@@ -7,7 +7,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # one level up from backend/
-FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 UPLOAD_DIR = 'uploads'
 AUDIO_DIR = 'audio'
 os.makedirs(UPLOAD_DIR, exist_ok= True)
@@ -72,7 +71,7 @@ app.add_middleware(
 #Creating a local running website
 @app.get('/')
 def serve_index():
-    file_path = os.path.join(FRONTEND_DIR, 'frontend.html')
+    file_path = os.path.join('index.html')
     if not os.path.exists(file_path):
         raise RuntimeError(f'File not found: {file_path}')
     return FileResponse(file_path)

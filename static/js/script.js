@@ -1,4 +1,3 @@
-// Theme switching logic (UI only)
     const themes = {
       default: {
         '--bg': '#0f1724',
@@ -6,16 +5,16 @@
         '--muted': '#9aa4b2',
         '--accent': '#4f46e5',
         '--glass': 'rgba(255,255,255,0.04)',
-        bodyBg: 'linear-gradient(180deg,#071023 0%, #071020 60%)',
+        bodyBg: "radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%) no-repeat fixed center / cover",
         text: '#e6eef8'
       },
       white: {
-        '--bg': '#f8fafc',
-        '--card': '#fff',
-        '--muted': '#64748b',
+        '--bg': '#a8f3ff',
+        '--card': 'linear-gradient(190deg,#e8e6e6 30%, #2b2b2b 60%) no-repeat fixed center / 500% 500%',
+        '--muted': '#242424',
         '--accent': '#6366f1',
-        '--glass': 'rgba(0,0,0,0.03)',
-        bodyBg: '#fff',
+        '--glass': 'rgba(168, 243, 255,0.03)',
+        bodyBg: "linear-gradient(90deg,#e8e6e6 30%, #2b2b2b 60%) no-repeat fixed center / 500% 500%",
         text: '#222'
       },
       black: {
@@ -26,8 +25,17 @@
         '--glass': 'rgba(255,255,255,0.03)',
         bodyBg: '#000',
         text: '#f4f4f5'
+      },
+      picker: {
+        '--bg': '#000',
+        '--card': '#18181b',
+        '--muted': '#a1a1aa',
+        '--accent': '#6366f1',
+        '--glass': 'rgba(255,255,255,0.03)',
+        bodyBg: '#000',
+        text: '#f4f4f5'
       }
-    };
+    }
     function setTheme(theme) {
       const t = themes[theme] || themes.default;
       for (const key in t) {
@@ -52,7 +60,6 @@
     });
     setTheme(localStorage.getItem('aiaudiobook_theme') || 'default');
 
-    // Tab switching (UI only)
     const tabs = document.querySelectorAll('.tab');
     tabs.forEach(t => t.addEventListener('click', ()=>{
       tabs.forEach(x=>x.classList.remove('active'));
@@ -62,7 +69,6 @@
       document.getElementById('panel-'+type).style.display='block';
     }));
 
-    // Drop area UI (no upload logic)
     const dropArea = document.getElementById('drop-area');
     const inputFile = document.getElementById('input-file');
     const dropAreaText = document.getElementById('drop-area-text');
@@ -72,7 +78,7 @@
     const btnGenerateAudio = document.getElementById('btn-generate-audio');
     const fileError = document.getElementById('file-error');
     const fileList = document.getElementById('file-list');
-    let uploadedFileUrl = null; // Store uploaded file URL
+    let uploadedFileUrl = null;
 
     dropArea.onclick = (e) => {
       inputFile.click();
@@ -140,7 +146,6 @@
       document.getElementById('choose-file-link').onclick = (e) => { e.stopPropagation(); inputFile.click(); };
     };
 
-    // Upload button: send file to backend (no backend logic here)
     btnUpload.onclick = async () => {
       if (!inputFile.files.length) return;
       const file = inputFile.files[0];
@@ -151,17 +156,15 @@
       btnUpload.textContent = "Uploading...";
 
       try {
-        // Change '/upload' to your backend endpoint
         const response = await fetch('http://localhost:8000/upload', {
           method: 'POST',
           body: formData
         });
         if (response.ok) {
           const result = await response.json();
-          uploadedFileUrl = result.url; // The backend should return the file URL
+          uploadedFileUrl = result.url;
           fileError.style.display = "none";
           btnUpload.textContent = "Uploaded!";
-          // Enable generate audio if .txt
           if (file.name.endsWith('.txt')) btnGenerateAudio.disabled = false;
         } else {
           fileError.textContent = "Upload failed.";
@@ -176,7 +179,6 @@
       btnUpload.disabled = false;
     };
 
-    // Generate Audio button: call backend to generate audio from uploaded .txt file
     btnGenerateAudio.onclick = async () => {
       if (!uploadedFileUrl) {
         fileError.textContent = "Please upload a .txt file first.";
@@ -198,7 +200,6 @@
           fileError.style.display = "block";
           btnGenerateAudio.textContent = "Generate Audio";
         } else {
-          // Optionally, provide a download link for the generated audio
           fileError.style.display = "none";
           btnGenerateAudio.textContent = "Done!";
           if (result.audio_url) {
@@ -215,3 +216,14 @@
       }
       btnGenerateAudio.disabled = false;
     };
+    const pickerBtn = document.getElementById("pickerBtn");
+const colorPicker = document.getElementById("colorPicker");
+
+pickerBtn.addEventListener("click", () => {
+  colorPicker.click();
+});
+
+colorPicker.addEventListener("input", (e) => {
+  let color = e.target.value;
+  document.body.style.background = color;
+});

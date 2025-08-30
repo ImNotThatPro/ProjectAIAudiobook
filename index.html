@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AI AudioBook — Upload</title>
   <meta name="description" content="Upload EPUB, PDF, or TXT files to generate audiobooks. Clean, smooth, browser-optimized interface." />
-  <link rel="stylesheet" href="static/css/style.css">
+  <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
   <div class="topbar">
-    <div class="topbar-logo" aria-label="Logo placeholder"></div>
+    <div class="topbar-logo" aria-label="Logo placeholder">AI</div>
     <div class="tabs" role="tablist" aria-label="Choose type">
       <div class="tab active" data-type="upload">Upload</div>
       <div class="tab" data-type="library">Library</div>
@@ -20,6 +20,8 @@
       <button class="color-btn" data-theme="default" aria-label="Default theme" style="background:linear-gradient(180deg,#071023 0%, #071020 60%);"></button>
       <button class="color-btn" data-theme="white" aria-label="White theme" style="background:#fff;border:1px solid #e5e7eb"></button>
       <button class="color-btn" data-theme="black" aria-label="Black theme" style="background:#000;"></button>
+      <button id="pickerBtn" class="color-btn" data-theme="picker" style="background: linear-gradient(135deg,#6366f1,#06b6d4)"></button>
+      <input type="color" id="colorPicker" style="display:none">
     </div>
     <div class="topbar-auth-dropdown" tabindex="0">
       <span class="auth-icon" aria-label="Account"></span>
@@ -33,7 +35,7 @@
   <div class="wrap">
     <header>
       <div class="logo">AI</div>
-      <div> 
+      <div>
         <h1>AI AudioBook — Upload Your Book</h1>
         <p class="lead">Upload EPUB, PDF, or TXT files to generate audiobooks. Clean, smooth, browser-optimized interface.</p>
       </div>
@@ -111,7 +113,6 @@
       </p>
     </div>
   </section>
-
-  <script src = 'static/js/script.js'></script>
+<script src = '/static/js/script.js'></script>
 </body>
 </html>
