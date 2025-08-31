@@ -7,8 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # one level up from backend/
-UPLOAD_DIR = 'uploads'
-AUDIO_DIR = 'audio'
+UPLOAD_DIR = os.path.join(BASE_DIR, 'uploads')
+AUDIO_DIR = os.path.join(BASE_DIR, 'audio')
 os.makedirs(UPLOAD_DIR, exist_ok= True)
 os.makedirs(AUDIO_DIR, exist_ok = True)
 
@@ -34,7 +34,7 @@ async def generate_audio(data: dict = Body(...)):
     if not url or not url.endswith('.txt'):
         return {'error': 'Only .txt files supported'}
 
-    file_path = url.lstrip('/')
+    file_path = os.path.join(BASE_DIR, url.lstrip('/'))
     if not os.path.exists(file_path):
         return {'error': 'File not found'}
 
@@ -58,7 +58,7 @@ async def generate_audio(data: dict = Body(...)):
     return {'audio_url': audio_url}
 
 origins = [
-    'https://imnotthatpro.github.io/ProjectAIAudiobook',
+    'https://imnotthatpro.github.io',
     'http://localhost:3000'
 ]
 
@@ -73,10 +73,6 @@ app.add_middleware(
 
 
 #Creating a local running website ONLY FOR TESTING PURPOSES
-#Uncomment this part and run backend/main.py using uvicorn to test locally
-# @app.get('/')
-# def serve_index():
-#     file_path = os.path.join('index.html')
-#     if not os.path.exists(file_path):
-#         raise RuntimeError(f'File not found: {file_path}')
-#     return FileResponse(file_path)
+@app.get('/')
+def serve_index():
+    return os.path.join(BASE_DIR, "frontend", "index.html")
