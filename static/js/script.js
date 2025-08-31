@@ -156,7 +156,7 @@
       btnUpload.textContent = "Uploading...";
 
       try {
-        const response = await fetch('http://localhost:8000/upload', {
+        const response = await fetch('https://audiobook-backend.onrender.com/upload', {
           method: 'POST',
           body: formData
         });
@@ -189,7 +189,7 @@
       btnGenerateAudio.textContent = "Generating...";
 
       try {
-        const response = await fetch('http://localhost:8000/generate_audio', {
+        const response = await fetch('https://audiobook-backend.onrender.com/generate_audio', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url: uploadedFileUrl })

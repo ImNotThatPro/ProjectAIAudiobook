@@ -57,11 +57,15 @@ async def generate_audio(data: dict = Body(...)):
     audio_url = f'/audio/{audio_filename}'
     return {'audio_url': audio_url}
 
+origins = [
+    'https://imnotthatpro.github.io/ProjectAIAudiobook',
+    'http://localhost:3000'
+]
 
 #Sth sth about CORSMiddleware that for now i don't understand
 app.add_middleware(
     CORSMiddleware,
-    allow_origins = ['*'],
+    allow_origins = origins,
     allow_credentials = True,
     allow_methods = ['*'],
     allow_headers = ['*']
