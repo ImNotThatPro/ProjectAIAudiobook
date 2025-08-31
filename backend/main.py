@@ -72,10 +72,11 @@ app.add_middleware(
 )
 
 
-#Creating a local running website
-@app.get('/')
-def serve_index():
-    file_path = os.path.join('index.html')
-    if not os.path.exists(file_path):
-        raise RuntimeError(f'File not found: {file_path}')
-    return FileResponse(file_path)
+#Creating a local running website ONLY FOR TESTING PURPOSES
+#Uncomment this part and run backend/main.py using uvicorn to test locally
+# @app.get('/')
+# def serve_index():
+#     file_path = os.path.join('index.html')
+#     if not os.path.exists(file_path):
+#         raise RuntimeError(f'File not found: {file_path}')
+#     return FileResponse(file_path)

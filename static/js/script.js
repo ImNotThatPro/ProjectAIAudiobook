@@ -78,6 +78,7 @@
     const btnGenerateAudio = document.getElementById('btn-generate-audio');
     const fileError = document.getElementById('file-error');
     const fileList = document.getElementById('file-list');
+    const BACKEND_URL = 'https://audiobook-backend.onrender.com';
     let uploadedFileUrl = null;
 
     dropArea.onclick = (e) => {
@@ -156,7 +157,7 @@
       btnUpload.textContent = "Uploading...";
 
       try {
-        const response = await fetch('https://audiobook-backend.onrender.com/upload', {
+        const response = await fetch(`${BACKEND_URL}/upload`, {
           method: 'POST',
           body: formData
         });
@@ -189,7 +190,7 @@
       btnGenerateAudio.textContent = "Generating...";
 
       try {
-        const response = await fetch('https://audiobook-backend.onrender.com/generate_audio', {
+        const response = await fetch(`${BACKEND_URL}/generate_audio`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url: uploadedFileUrl })
@@ -205,7 +206,7 @@
           if (result.audio_url) {
             const audio = document.createElement('audio');
             audio.controls = true;
-            audio.src = 'http://127.0.0.1:8000'+ result.audio_url;
+            audio.src = `${BACKEND_URL}${result.audio_url}`;
             fileList.appendChild(audio);
           }
         }
