@@ -6,7 +6,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # one level up from backend/
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # one level up from backend/
+FRONTEND_DIR = os.path.join(BASE_DIR,'..', 'frontend')
 UPLOAD_DIR = os.path.join(BASE_DIR, 'uploads')
 AUDIO_DIR = os.path.join(BASE_DIR, 'audio')
 os.makedirs(UPLOAD_DIR, exist_ok= True)
@@ -73,6 +74,6 @@ app.add_middleware(
 
 
 #Creating a local running website ONLY FOR TESTING PURPOSES
-@app.get('/')
-def serve_index():
-    return os.path.join(BASE_DIR, "frontend", "index.html")
+@app.get('/', response_class= FileResponse)
+async def serve_index():
+    return FileResponse(os.path.join(FRONTEND_DIR, 'index.html'))
