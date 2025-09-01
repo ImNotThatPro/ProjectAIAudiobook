@@ -1,4 +1,4 @@
-import os, requests, re
+import os
 from fastapi import FastAPI, File, UploadFile, Body
 from gtts import gTTS
 from fastapi.responses import JSONResponse, FileResponse
@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # one level up from backend/
-FRONTEND_DIR = os.path.join(BASE_DIR,'..', 'frontend')
+ROOT_DIR = os.path.join(BASE_DIR,'..')
 UPLOAD_DIR = os.path.join(BASE_DIR, 'uploads')
 AUDIO_DIR = os.path.join(BASE_DIR, 'audio')
 os.makedirs(UPLOAD_DIR, exist_ok= True)
@@ -16,17 +16,18 @@ os.makedirs(AUDIO_DIR, exist_ok = True)
 app.mount('/uploads', StaticFiles(directory=UPLOAD_DIR), name= 'uploads')
 app.mount('/audio', StaticFiles(directory=AUDIO_DIR), name = 'audio')
 #IMPORTANT TAKE THIS TO YOUR FRONT END LOCATION INSIDE DIRECTORY IN ORDER TO WORK
-app.mount('/static', StaticFiles(directory='static'), name = 'static')
+app.mount('/static', StaticFiles(directory= os.path.join(ROOT_DIR,'static')), name = 'static')
 
 
 #Uhh getting file from the front end when people drop or choose file and then send it here
 @app.post('/upload')
 async def upload_file(file: UploadFile = File(...)):
-    file_location = os.path.join(UPLOAD_DIR, file.filename)
-    with open(file_location,'wb') as f:
+    safe_filename = os.path.basename(file.filename)
+    file_location = os.path.join(UPLOAD_DIR, safe_filename)
+    with open(file_location, 'wb') as f:
         f.write(await file.read())
-    url = f'/uploads/{file.filename}'
-    return JSONResponse({'filename': file.filename, 'url': url, 'status': 'received'})
+    url = f'/uploads/{safe_filename}'
+    return JSONResponse({'filename': safe_filename, 'url': url, 'status': 'received'})
 
 #Generate audio type shit
 @app.post('/generate_audio')
@@ -35,7 +36,7 @@ async def generate_audio(data: dict = Body(...)):
     if not url or not url.endswith('.txt'):
         return {'error': 'Only .txt files supported'}
 
-    file_path = os.path.join(BASE_DIR, url.lstrip('/'))
+    file_path = os.path.join(UPLOAD_DIR, os.path.basename(url))
     if not os.path.exists(file_path):
         return {'error': 'File not found'}
 
@@ -60,7 +61,8 @@ async def generate_audio(data: dict = Body(...)):
 
 origins = [
     'https://imnotthatpro.github.io',
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://projectaiaudiobook.onrender.com'
 ]
 
 #Sth sth about CORSMiddleware that for now i don't understand
@@ -76,4 +78,4 @@ app.add_middleware(
 #Creating a local running website ONLY FOR TESTING PURPOSES
 @app.get('/', response_class= FileResponse)
 async def serve_index():
-    return FileResponse(os.path.join(FRONTEND_DIR, 'index.html'))
+    return FileResponse(os.path.join(ROOT_DIR, 'index.html'))
