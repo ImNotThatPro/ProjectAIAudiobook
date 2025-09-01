@@ -78,7 +78,7 @@
     const btnGenerateAudio = document.getElementById('btn-generate-audio');
     const fileError = document.getElementById('file-error');
     const fileList = document.getElementById('file-list');
-    const BACKEND_URL = 'https://audiobook-backend.onrender.com';
+    const BACKEND_URL = 'https://projectaiaudiobook.onrender.com';
     let uploadedFileUrl = null;
 
     dropArea.onclick = (e) => {
