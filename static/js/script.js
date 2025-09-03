@@ -195,7 +195,12 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url: uploadedFileUrl })
         });
-        const result = await response.json();
+        console.log('Response status:', response.status);
+        const result = await response.json().catch(err =>{
+          console.error('JSON parse failed:', err)
+          throw new Error('Invalid JSON response');
+        });
+        console.log('Result from backend:', result)
         if (result.error) {
           fileError.textContent = result.error;
           fileError.style.display = "block";
@@ -203,11 +208,32 @@
         } else {
           fileError.style.display = "none";
           btnGenerateAudio.textContent = "Done!";
+          //I THINK THIS SHOULD BE THE PLAY BUTTON AND HOW IT SHOULD LOOK LIKE (CHANGE IN THE FUTURE HERE)
           if (result.audio_url) {
+            console.log('got audio URL:', result.audio_url)
             const audio = document.createElement('audio');
-            audio.controls = true;
             audio.src = `${BACKEND_URL}${result.audio_url}`;
+            audio.id = 'customAudio'; 
             fileList.appendChild(audio);
+
+            const playBtn = document.createElement('button');
+            playBtn.textContent = '▶ Play';
+            //Style this in css file (Aijann job)
+            playBtn.className = 'play-btn';
+            fileList.appendChild(playBtn);
+
+            playBtn.addEventListener('click', () =>{
+              if (audio.paused) {
+                audio.play();
+                playBtn.textContent = "⏸ Pause";
+              }
+              else {
+                audio.pause();
+                playBtn.textContent = '▶ Play';
+              }
+            });
+          } else {
+            console.log('No audio_url in result:',result)
           }
         }
       } catch (e) {
@@ -217,7 +243,6 @@
       }
       btnGenerateAudio.disabled = false;
     };
-//I THINK THIS SHOULD BE THE PLAY BUTTON AND HOW IT SHOULD LOOK LIKE (CHANGE IN THE FUTURE HERE)
     const pickerBtn = document.getElementById("pickerBtn");
 const colorPicker = document.getElementById("colorPicker");
 

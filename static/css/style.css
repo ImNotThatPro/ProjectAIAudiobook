@@ -253,3 +253,25 @@ footer{margin-top:16px;color:var(--muted);font-size:13px}
 @media (max-width:640px){
   .drop-area { font-size: 14px; padding: 18px 0; }
 }
+.play-btn {
+  background: var(--accent);
+  color: white;
+  border:none;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  font-size: 28px;
+  cursor: pointer;
+  transition: background = 0.2s, transform = 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.play-btn:hover {
+  background: #4338ca; /* darker accent on hover */
+  transform: scale(1.05);
+}
+
+.play-btn:active {
+  transform: scale(0.95);
+}
