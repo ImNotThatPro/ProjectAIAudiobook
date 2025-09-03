@@ -254,3 +254,24 @@ colorPicker.addEventListener("input", (e) => {
   let color = e.target.value;
   document.body.style.background = color;
 });
+const playBtn = document.getElementById("playBtn");
+const progressBar = document.getElementById("progressBar");
+
+let isPlaying = false;
+let progress = 0;
+let interval = null;
+
+playBtn.addEventListener("click", () => {
+  isPlaying = !isPlaying;
+  playBtn.textContent = isPlaying ? "⏸️" : "▶️";
+
+  if (isPlaying) {
+    interval = setInterval(() => {
+      progress += 1;
+      if (progress > 100) progress = 0;
+      progressBar.style.width = progress + "%";
+    }, 300);
+  } else {
+    clearInterval(interval);
+  }
+});
