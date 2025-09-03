@@ -126,3 +126,4 @@ def login(user: UserLogin, db: Session = Depends(database.get_db)):
 #I AM A DISCORD SLAVE AND I WILL SEND THIS MESSAGE TO MY DISCORD SERVER 
 #Woof
 #Meow
+#Tanscan oc cho 
