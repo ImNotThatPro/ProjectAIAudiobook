@@ -121,3 +121,5 @@ def login(user: UserLogin, db: Session = Depends(database.get_db)):
     if not db_user or not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(status_code=401, detail = 'Invalid username or password | Check again')
     return {'msg': f'Welcome back, {db_user.username}'}
+
+#Testing slave again

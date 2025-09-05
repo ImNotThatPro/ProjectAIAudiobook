@@ -305,3 +305,31 @@ function downloadTxt() {
   link.click();
   URL.revokeObjectURL(link.href);
 }
+const playBtn = document.getElementById("playBtn");
+const progressBar = document.getElementById("progressBar");
+
+let isPlaying = false;
+let progress = 0;
+let interval = null;
+
+playBtn.addEventListener("click", () => {
+  isPlaying = !isPlaying;
+  playBtn.textContent = isPlaying ? "⏸️" : "▶️";
+
+  if (isPlaying) {
+    interval = setInterval(() => {
+      progress += 1;
+      if (progress > 100) progress = 0;
+      progressBar.style.width = progress + "%";
+    }, 300);
+  } else {
+    clearInterval(interval);
+  }
+});
+document.getElementById("auth-login-btn").addEventListener("click", () => {
+  window.location.href = "/login/login.html"; // trang login riêng
+});
+
+document.getElementById("auth-register-btn").addEventListener("click", () => {
+  window.location.href = "/register/register.html"; // trang register riêng
+});

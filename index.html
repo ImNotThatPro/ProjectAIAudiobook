@@ -11,7 +11,7 @@
   <div class="topbar">
     <div class="topbar-logo" aria-label="Logo placeholder">AI</div>
     <div class="tabs" role="tablist" aria-label="Choose type">
-      <div class="tab active" data-type="upload">Upload</div>
+      <div class="tab active" role="tab" data-type="upload">Upload</div>
       <div class="tab" data-type="library">Library</div>
       <div class="tab" data-type="create">Create a txt</div>
       <div class="tab" data-type="about">About</div>
@@ -27,8 +27,8 @@
     <div class="topbar-auth-dropdown" tabindex="0">
       <span class="auth-icon" aria-label="Account"></span>
       <div class="auth-dropdown-menu">
-        <div class="tab" data-type="login" style="display:inline-block; margin-right:10px;">Login</div>
-        <div class="tab" data-type="register" style="display:inline-block;">Register</div>
+        <button class="auth-btn" id="auth-login-btn">Login</button>
+        <button class="auth-btn" id="auth-register-btn">Register</button>
       </div>
     </div>
   </div>
@@ -41,96 +41,96 @@
       </div>
     </header>
 
-    <div class="card">
-      <!-- Upload panel -->
-      <div id="panel-upload" class="panel">
-        <div class="field">
-          <label>Upload your book file (EPUB, PDF, or TXT)</label>
-          <div id="drop-area" class="drop-area">
-            <span id="drop-area-text">Drop EPUB, PDF, or TXT files here or <span id="choose-file-link" style="color:#4f46e5;cursor:pointer;text-decoration:underline;">press here</span></span>
-            <input id="input-file" type="file" accept=".epub,.pdf,.txt" style="display:none" />
+    <!-- ⬇️ New container to hold upload + player side by side -->
+    <div class="main-container">
+      <!-- LEFT: Upload card -->
+      <div class="upload-section">
+        <div class="card">
+          <!-- Upload panel -->
+          <div id="panel-upload" class="panel">
+            <div class="field">
+              <label>Upload your book file (EPUB, PDF, or TXT)</label>
+              <div id="drop-area" class="drop-area">
+                <span id="drop-area-text">Drop EPUB, PDF, or TXT files here or <span id="choose-file-link" style="color:#4f46e5;cursor:pointer;text-decoration:underline;">press here</span></span>
+                <input id="input-file" type="file" accept=".epub,.pdf,.txt" style="display:none" />
+              </div>
+              <div class="hint" id="file-hint">
+                Supported formats: EPUB, PDF, TXT. Max size: 50MB.
+              </div>
+              <div class="file-error" id="file-error" style="display:none"></div>
+            </div>
+            <div class="field row">
+              <button id="btn-upload" disabled>Upload</button>
+              <button class="ghost" id="btn-clear">Clear</button>
+              <button id="btn-generate-audio" disabled>Generate Audio</button>
+            </div>
+            <ul id="file-list" style="margin-top:12px"></ul>
           </div>
-          <div class="hint" id="file-hint">
-            Supported formats: EPUB, PDF, TXT. Max size: 50MB.
+
+          <!-- Library panel -->
+          <div id="panel-library" class="panel" style="display:none">
+            <div class="field">
+              <label>Your uploaded audiobooks will appear here.</label>
+            </div>
+            <div class="hint">No books yet.</div>
           </div>
-          <div class="file-error" id="file-error" style="display:none"></div>
+
+          <!-- About panel -->
+          <div id="panel-about" class="panel" style="display:none">
+            <div class="field">
+              <label>About AI AudioBook</label>
+              <div class="hint">
+                This tool lets you upload your book files and generate audiobooks using AI. All processing happens securely in your browser or on our servers.
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="field row">
-          <button id="btn-upload" disabled>Upload</button>
-          <button class="ghost" id="btn-clear">Clear</button>
-          <button id="btn-generate-audio" disabled>Generate Audio</button>
-        </div>
-        <ul id="file-list" style="margin-top:12px"></ul>
       </div>
-
-      <!-- Library panel -->
-      <div id="panel-library" class="panel" style="display:none">
-        <div class="field">
-          <label>Your uploaded audiobooks will appear here.</label>
+            <!-- Create txt file by sigma-->
+            <div id="panel-create" class="panel" style="display:none">
+          <h3>Create TXT</h3>
+          <div class="field">
+            <label for="filename">Name file:</label>
+            <input type="text" id="filename" placeholder="enter-file-name">
+          </div>
+          <div class="field">
+            <label for="content">Content:</label><br>
+            <textarea id="content" rows="6" cols="40" placeholder="enter-content-here"></textarea>
+          </div>
+          <button id="btn-download-txt">Download TXT file</button>
         </div>
-        <div class="hint">No books yet.</div>
-      </div>
+      <!-- RIGHT: Spotify-style player (UI only for now) -->
+      <div class="player-section">
+        <div class="player-card">
+          <div class="cover"></div>
+          <div class="title">Sample Title</div>
+          <div class="artist">Sample Artist</div>
 
-      <!-- Panel Login -->
-      <div id="panel-login" class="panel" style="display:none; padding:15px; border:1px solid #ccc; border-radius:8px; width:250px;">
-        <div class="field">
-          <label>Login to your account</label><br><br>
-
-          <label>Username:</label><br>
-          <input type="text" style="width:100%; padding:6px; margin:5px 0; border:1px solid #aaa; border-radius:4px;"><br>
-
-          <label>Password:</label><br>
-          <input type="password" style="width:100%; padding:6px; margin:5px 0; border:1px solid #aaa; border-radius:4px;">
-        </div>
-        <div class="hint" style="margin-top:10px; color:#666; font-size:14px;">Enter your login details above.</div>
-      </div>
-
-      <!-- Panel Register -->
-      <div id="panel-register" class="panel" style="display:none; padding:15px; border:1px solid #ccc; border-radius:8px; width:250px;">
-        <div class="field">
-          <label>Create a new account</label><br><br>
-
-          <label>Username:</label><br>
-          <input type="text" style="width:100%; padding:6px; margin:5px 0; border:1px solid #aaa; border-radius:4px;"><br>
-
-          <label>Email:</label><br>
-          <input type="email" style="width:100%; padding:6px; margin:5px 0; border:1px solid #aaa; border-radius:4px;"><br>
-
-          <label>Password:</label><br>
-          <input type="password" style="width:100%; padding:6px; margin:5px 0; border:1px solid #aaa; border-radius:4px;">
-        </div>
-        <div class="hint" style="margin-top:10px; color:#666; font-size:14px;">Fill in your details to register.</div>
-      </div>
-
-      <!-- Create txt file by sigma-->
-      <div id="panel-create" class="panel" style="display:none">
-        <h3>Create TXT</h3>
-
-        <div class="field">
-          <label for="filename">Name file:</label>
-          <input type="text" id="filename" placeholder="enter-file-name">
-        </div>
-        <br>
-
-        <div class="field">
-          <label for="content">Content:</label><br>
-          <textarea id="content" rows="6" cols="40" placeholder="enter-content-here"></textarea>
-        </div>
-        <br>
-
-        <button onclick="downloadTxt()">Download TXT file</button>
-      </div>
-
-      <!-- About panel -->
-      <div id="panel-about" class="panel" style="display:none">
+      <!-- Play panel -->
+      <div id="panel-plays" class="panel" style="display:none">
         <div class="field">
           <label>About AI AudioBook</label>
           <div class="hint">
             This tool lets you upload your book files and generate audiobooks using AI. All processing happens securely in your browser or on our servers.
           </div>
-        </div>
+          <div class="controls">
+            <button class="btn" id="playBtn">▶️</button>
+          </div>
+
+          <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+
+          <div class="settings">
+            <span>⚙️ Speed</span>
+            <span>⚙️ AI Voice (WIP)</span>
+            <span>⚙️ Chapters (WIP)</span>
+          </div>
+          </div>
       </div>
     </div>
+    <!-- end main-container -->
+  </div>
   </div>
 
   <!-- Simple Guide Section -->
@@ -145,10 +145,13 @@
       </ol>
       <p class="small" style="margin-top:12px;color:var(--muted)">
         <b>Tip:</b> For best results, use clean, well-formatted files. Large files may take longer to process.
+        <br>
+        Where to get your book from? 📚 Get classics from
+        <a href="https://www.gutenberg.org/" target="_blank">Project Gutenberg</a>.
       </p>
     </div>
   </section>
-
+  
   <!-- Persistent Bottom Info Section -->
   <section class="bottom-info-section">
     <div class="bottom-info-card">
@@ -163,6 +166,6 @@
       </p>
     </div>
   </section>
-<script src = 'static/js/script.js'></script>
+<script src='static/js/script.js'></script>
 </body>
 </html>
