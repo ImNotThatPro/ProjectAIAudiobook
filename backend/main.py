@@ -121,13 +121,3 @@ def login(user: UserLogin, db: Session = Depends(database.get_db)):
     if not db_user or not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(status_code=401, detail = 'Invalid username or password | Check again')
     return {'msg': f'Welcome back, {db_user.username}'}
-
-#TESTING DISCORD BOT DELETE LATER PLEASE
-#I AM A DISCORD SLAVE AND I WILL SEND THIS MESSAGE TO MY DISCORD SERVER 
-#Woof
-#Meow
-#Tanscan oc cho 
-#v5 testing
-#v6
-#FINALLY FUCKINGLY IT WORKED TANSCAN YOU DOG
-#YIPPPEEEEEE
