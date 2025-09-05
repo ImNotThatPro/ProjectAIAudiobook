@@ -232,18 +232,23 @@
                 playBtn.textContent = '▶ Play';
               }
             });
-          } else {
-            console.log('No audio_url in result:',result)
-          }
-        }
-      } catch (e) {
-        fileError.textContent = "Audio generation failed.";
-        fileError.style.display = "block";
-        btnGenerateAudio.textContent = "Generate Audio";
+      } else {
+        console.log('No audio_url in result:', result);
+        fileError.style.display = "none";
+        btnGenerateAudio.textContent = "Done!";
       }
-      btnGenerateAudio.disabled = false;
-    };
-    const pickerBtn = document.getElementById("pickerBtn");
+    }
+  } catch (e) {
+    fileError.textContent = "Audio generation failed.";
+    fileError.style.display = "block";
+    btnGenerateAudio.textContent = "Generate Audio";
+  } finally {
+    btnGenerateAudio.disabled = false;
+  }
+};
+
+// Color picker
+const pickerBtn = document.getElementById("pickerBtn");
 const colorPicker = document.getElementById("colorPicker");
 
 pickerBtn.addEventListener("click", () => {
@@ -254,3 +259,49 @@ colorPicker.addEventListener("input", (e) => {
   let color = e.target.value;
   document.body.style.background = color;
 });
+    const btn = document.getElementById("pickerBtn");
+    let clicks = 0;
+    let intervalId = null;
+    let running = false;
+
+    function randomColor() {
+      return `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
+    }
+
+    btn.addEventListener("click", () => {
+      clicks++;
+
+      if (clicks >= 10) {
+        if (!running) {
+          // bật random
+          running = true;
+          intervalId = setInterval(() => {
+            document.body.style.background = randomColor();
+          }, 100);
+        } else {
+          // tắt random
+          running = false;
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+      }
+    });
+function downloadTxt() {
+  const text = document.getElementById("content").value;
+  let filename = document.getElementById("filename").value.trim();
+
+  if (filename === "") {
+    filename = "myfile"; // default name
+  }
+
+  if (!filename.endsWith(".txt")) {
+    filename += ".txt";
+  }
+
+  const blob = new Blob([text], { type: "text/plain" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}

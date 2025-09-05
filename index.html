@@ -13,6 +13,7 @@
     <div class="tabs" role="tablist" aria-label="Choose type">
       <div class="tab active" data-type="upload">Upload</div>
       <div class="tab" data-type="library">Library</div>
+      <div class="tab" data-type="create">Create a txt</div>
       <div class="tab" data-type="about">About</div>
     </div>
     <div class="small">Works on desktop & mobile</div>
@@ -26,12 +27,11 @@
     <div class="topbar-auth-dropdown" tabindex="0">
       <span class="auth-icon" aria-label="Account"></span>
       <div class="auth-dropdown-menu">
-        <button class="auth-btn" id="auth-login-btn">Login</button>
-        <button class="auth-btn" id="auth-register-btn">Register</button>
+        <div class="tab" data-type="login" style="display:inline-block; margin-right:10px;">Login</div>
+        <div class="tab" data-type="register" style="display:inline-block;">Register</div>
       </div>
     </div>
   </div>
-
   <div class="wrap">
     <header>
       <div class="logo">AI</div>
@@ -69,6 +69,56 @@
           <label>Your uploaded audiobooks will appear here.</label>
         </div>
         <div class="hint">No books yet.</div>
+      </div>
+
+      <!-- Panel Login -->
+      <div id="panel-login" class="panel" style="display:none; padding:15px; border:1px solid #ccc; border-radius:8px; width:250px;">
+        <div class="field">
+          <label>Login to your account</label><br><br>
+
+          <label>Username:</label><br>
+          <input type="text" style="width:100%; padding:6px; margin:5px 0; border:1px solid #aaa; border-radius:4px;"><br>
+
+          <label>Password:</label><br>
+          <input type="password" style="width:100%; padding:6px; margin:5px 0; border:1px solid #aaa; border-radius:4px;">
+        </div>
+        <div class="hint" style="margin-top:10px; color:#666; font-size:14px;">Enter your login details above.</div>
+      </div>
+
+      <!-- Panel Register -->
+      <div id="panel-register" class="panel" style="display:none; padding:15px; border:1px solid #ccc; border-radius:8px; width:250px;">
+        <div class="field">
+          <label>Create a new account</label><br><br>
+
+          <label>Username:</label><br>
+          <input type="text" style="width:100%; padding:6px; margin:5px 0; border:1px solid #aaa; border-radius:4px;"><br>
+
+          <label>Email:</label><br>
+          <input type="email" style="width:100%; padding:6px; margin:5px 0; border:1px solid #aaa; border-radius:4px;"><br>
+
+          <label>Password:</label><br>
+          <input type="password" style="width:100%; padding:6px; margin:5px 0; border:1px solid #aaa; border-radius:4px;">
+        </div>
+        <div class="hint" style="margin-top:10px; color:#666; font-size:14px;">Fill in your details to register.</div>
+      </div>
+
+      <!-- Create txt file by sigma-->
+      <div id="panel-create" class="panel" style="display:none">
+        <h3>Create TXT</h3>
+
+        <div class="field">
+          <label for="filename">Name file:</label>
+          <input type="text" id="filename" placeholder="enter-file-name">
+        </div>
+        <br>
+
+        <div class="field">
+          <label for="content">Content:</label><br>
+          <textarea id="content" rows="6" cols="40" placeholder="enter-content-here"></textarea>
+        </div>
+        <br>
+
+        <button onclick="downloadTxt()">Download TXT file</button>
       </div>
 
       <!-- About panel -->
