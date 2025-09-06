@@ -232,18 +232,23 @@
                 playBtn.textContent = '▶ Play';
               }
             });
-          } else {
-            console.log('No audio_url in result:',result)
-          }
-        }
-      } catch (e) {
-        fileError.textContent = "Audio generation failed.";
-        fileError.style.display = "block";
-        btnGenerateAudio.textContent = "Generate Audio";
+      } else {
+        console.log('No audio_url in result:', result);
+        fileError.style.display = "none";
+        btnGenerateAudio.textContent = "Done!";
       }
-      btnGenerateAudio.disabled = false;
-    };
-    const pickerBtn = document.getElementById("pickerBtn");
+    }
+  } catch (e) {
+    fileError.textContent = "Audio generation failed.";
+    fileError.style.display = "block";
+    btnGenerateAudio.textContent = "Generate Audio";
+  } finally {
+    btnGenerateAudio.disabled = false;
+  }
+};
+
+// Color picker
+const pickerBtn = document.getElementById("pickerBtn");
 const colorPicker = document.getElementById("colorPicker");
 
 pickerBtn.addEventListener("click", () => {

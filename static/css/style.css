@@ -280,6 +280,15 @@ footer{margin-top:16px;color:var(--muted);font-size:13px}
   height: 100vh;
   background: #111;
   color: white;
+  gap: 20px;
+}
+
+.guide-section,
+.bottom-info-section {
+  width: 100%;
+  margin-top: 20px;
+  clear: both;   /* chắc chắn nằm dưới */
+  display: block; /* tránh bị inline ảnh hưởng */
 }
 
 /* LEFT */
@@ -378,4 +387,29 @@ footer{margin-top:16px;color:var(--muted);font-size:13px}
 }
 .settings span:hover {
   color: white;
+}
+.auth-panel {
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 250px;
+  background: #fff;
+  color: #000; /* thêm để chữ không bị chìm khi đổi theme */
+}
+
+.auth-panel input {
+  background: #f9f9f9;
+  color: #111;
+}
+.tab:hover {
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+}
+@media (max-width:640px){
+  .main-container {
+    flex-direction: column;
+  }
+  .upload-section, .player-section {
+    width: 100%;
+  }
 }
