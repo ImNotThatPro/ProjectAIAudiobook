@@ -123,3 +123,4 @@ def login(user: UserLogin, db: Session = Depends(database.get_db)):
     return {'msg': f'Welcome back, {db_user.username}'}
 
 #Testing slave again
+#Testing slave v2 
