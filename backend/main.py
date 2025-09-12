@@ -98,8 +98,8 @@ class UserLogin(BaseModel):
     username : str
     password : str
 
-@app.post('/signup')
-def signup(user: UserCreate, db: Session = Depends(database.get_db)):
+@app.post('/register')
+def register(user: UserCreate, db: Session = Depends(database.get_db)):
     #Check if this kind of user info already existed inside the database, else continue
     existing_user = db.query(db_models.User).filter(db_models.User.username == user.username).first()
     if existing_user:
@@ -115,12 +115,17 @@ def signup(user: UserCreate, db: Session = Depends(database.get_db)):
     db.refresh(new_user)
     return {'msg': 'User created successfully', 'username':new_user.username}
 
+@app.get('/login', response_class=FileResponse)
+async def login_serve():
+    return FileResponse(os.path.join('login.html'))
+
+@app.get('/register', response_class=FileResponse)
+async def register_serve():
+    return FileResponse(os.path.join('register.html'))
+
 @app.post('/login')
-def login(user: UserLogin, db: Session = Depends(database.get_db)):
+async def login(user: UserLogin, db: Session = Depends(database.get_db)):
     db_user = db.query(db_models.User).filter(db_models.User.username == user.username).first()
     if not db_user or not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(status_code=401, detail = 'Invalid username or password | Check again')
     return {'msg': f'Welcome back, {db_user.username}'}
-
-#Testing slave again
-#Testing slave v3

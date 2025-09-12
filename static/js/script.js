@@ -327,9 +327,9 @@ playBtn.addEventListener("click", () => {
   }
 });
 document.getElementById("auth-login-btn").addEventListener("click", () => {
-  window.location.href = "/login/login.html"; // trang login riêng
+  window.location.href = "/login"; // trang login riêng
 });
 
 document.getElementById("auth-register-btn").addEventListener("click", () => {
-  window.location.href = "/register/register.html"; // trang register riêng
+  window.location.href = "/register"; // trang register riêng
 });
