@@ -211,27 +211,26 @@
           //I THINK THIS SHOULD BE THE PLAY BUTTON AND HOW IT SHOULD LOOK LIKE (CHANGE IN THE FUTURE HERE)
           if (result.audio_url) {
             console.log('got audio URL:', result.audio_url)
-            const audio = document.createElement('audio');
+            // Instead of creating a new play button, reuse the existing one
+            const audio = document.getElementById('customAudio') || document.createElement('audio');
             audio.src = `${BACKEND_URL}${result.audio_url}`;
-            audio.id = 'customAudio'; 
-            fileList.appendChild(audio);
+            audio.id = 'customAudio';
+            document.body.appendChild(audio); // keep it hidden but accessible
+            const url = `${BACKEND_URL}${result.audio_url}`
+            setAudioSource(url);
+            // Hook into the existing playBtn
+            const playBtn = document.getElementById('playBtn');
+            playBtn.disabled = false; // enable it once audio is ready
 
-            const playBtn = document.createElement('button');
-            playBtn.textContent = '▶ Play Sample Audio';
-            //Style this in css file (Aijann job)
-            playBtn.className = 'play-btn';
-            fileList.appendChild(playBtn);
-
-            playBtn.addEventListener('click', () =>{
+            playBtn.onclick = () => {
               if (audio.paused) {
                 audio.play();
-                playBtn.textContent = "⏸ Pause";
-              }
-              else {
+                playBtn.textContent = "⏸️"; // pause icon
+              } else {
                 audio.pause();
-                playBtn.textContent = '▶ Play Sample Audio';
+                playBtn.textContent = "▶️"; // play icon
               }
-            });
+            };      
       } else {
         console.log('No audio_url in result:', result);
         fileError.style.display = "none";
@@ -259,27 +258,63 @@ colorPicker.addEventListener("input", (e) => {
   let color = e.target.value;
   document.body.style.background = color;
 });
+//Create progress bar element 
 const playBtn = document.getElementById("playBtn");
 const progressBar = document.getElementById("progressBar");
+const progressContainer = document.getElementById('progress')
+//Check if there are already a audio or not
+let audio = document.getElementById('customAudio')
+if (!audio){
+  audio = document.createElement('audio')
+  audio.id = 'customAudio'
+  audio.style.display = 'none'
+  document.body.appendChild(audio)
 
-let isPlaying = false;
-let progress = 0;
-let interval = null;
+}
+//For when you have a uploaded txt file
+//Also for a plain txt link in the future
+function setAudioSource(url){
+  audio.src = url;
+  audio.load();
+}
 
-playBtn.addEventListener("click", () => {
-  isPlaying = !isPlaying;
-  playBtn.textContent = isPlaying ? "⏸️" : "▶️";
-
-  if (isPlaying) {
-    interval = setInterval(() => {
-      progress += 1;
-      if (progress > 100) progress = 0;
-      progressBar.style.width = progress + "%";
-    }, 300);
+playBtn.addEventListener('click', () =>{
+  if (audio.paused){
+    audio.play()
+  
   } else {
-    clearInterval(interval);
+    audio.pause()
   }
+  
 });
+
+audio.addEventListener('play', () => {
+  playBtn.textContent = '⏸️'
+});
+audio.addEventListener('pause',() => {
+  playBtn.textContent = '▶️'
+})
+audio.addEventListener('ended' ,() => {
+  playBtn.textContent = '▶️'
+});
+
+audio.addEventListener('timeupdate', () => {
+  if (!audio.duration || isNaN(audio.duration)) return;
+  const percent = (audio.currentTime / audio.duration) * 100;
+  progressBar.style.width = percent + '%';
+})
+
+if (progressContainer) {
+  progressContainer.addEventListener('click', (e) => {
+    const rect = progressContainer.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width
+    const ratio = Math.max(0, Math.min(1, clickX / width));
+    if (audio.duration &&  !isNaN(audio.duration)) {
+      audio.currentTime = ratio * audio.duration;
+    }
+  });
+}
 document.getElementById("auth-login-btn").addEventListener("click", () => {
   window.location.href = "/login"; // trang login riêng
 });
