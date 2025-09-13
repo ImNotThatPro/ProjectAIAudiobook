@@ -217,7 +217,7 @@
             fileList.appendChild(audio);
 
             const playBtn = document.createElement('button');
-            playBtn.textContent = '▶ Play';
+            playBtn.textContent = '▶ Play Sample Audio';
             //Style this in css file (Aijann job)
             playBtn.className = 'play-btn';
             fileList.appendChild(playBtn);
@@ -229,7 +229,7 @@
               }
               else {
                 audio.pause();
-                playBtn.textContent = '▶ Play';
+                playBtn.textContent = '▶ Play Sample Audio';
               }
             });
       } else {
