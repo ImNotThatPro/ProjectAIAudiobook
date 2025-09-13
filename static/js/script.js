@@ -218,19 +218,8 @@
             document.body.appendChild(audio); // keep it hidden but accessible
             const url = `${BACKEND_URL}${result.audio_url}`
             setAudioSource(url);
-            // Hook into the existing playBtn
             const playBtn = document.getElementById('playBtn');
-            playBtn.disabled = false; // enable it once audio is ready
-
-            playBtn.onclick = () => {
-              if (audio.paused) {
-                audio.play();
-                playBtn.textContent = "⏸️"; // pause icon
-              } else {
-                audio.pause();
-                playBtn.textContent = "▶️"; // play icon
-              }
-            };      
+            playBtn.disabled = false; // enable when audio is ready    
       } else {
         console.log('No audio_url in result:', result);
         fileError.style.display = "none";
