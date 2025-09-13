@@ -277,6 +277,9 @@ footer{margin-top:16px;color:var(--muted);font-size:13px}
 }
 .main-container {
   display: flex;
+  height: 100vh;
+  background: #111;
+  color: white;
   gap: 20px;
 }
 

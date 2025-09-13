@@ -66,7 +66,39 @@
             </div>
             <ul id="file-list" style="margin-top:12px"></ul>
           </div>
+    <!-- ⬇️ New container to hold upload + player side by side -->
+    <div class="main-container">
+      <!-- LEFT: Upload card -->
+      <div class="upload-section">
+        <div class="card">
+          <!-- Upload panel -->
+          <div id="panel-upload" class="panel">
+            <div class="field">
+              <label>Upload your book file (EPUB, PDF, or TXT)</label>
+              <div id="drop-area" class="drop-area">
+                <span id="drop-area-text">Drop EPUB, PDF, or TXT files here or <span id="choose-file-link" style="color:#4f46e5;cursor:pointer;text-decoration:underline;">press here</span></span>
+                <input id="input-file" type="file" accept=".epub,.pdf,.txt" style="display:none" />
+              </div>
+              <div class="hint" id="file-hint">
+                Supported formats: EPUB, PDF, TXT. Max size: 50MB.
+              </div>
+              <div class="file-error" id="file-error" style="display:none"></div>
+            </div>
+            <div class="field row">
+              <button id="btn-upload" disabled>Upload</button>
+              <button class="ghost" id="btn-clear">Clear</button>
+              <button id="btn-generate-audio" disabled>Generate Audio</button>
+            </div>
+            <ul id="file-list" style="margin-top:12px"></ul>
+          </div>
 
+          <!-- Library panel -->
+          <div id="panel-library" class="panel" style="display:none">
+            <div class="field">
+              <label>Your uploaded audiobooks will appear here.</label>
+            </div>
+            <div class="hint">No books yet.</div>
+          </div>
           <!-- Library panel -->
           <div id="panel-library" class="panel" style="display:none">
             <div class="field">
@@ -131,6 +163,42 @@
     </div>
     <!-- end main-container -->
   </div>
+          <!-- About panel -->
+          <div id="panel-about" class="panel" style="display:none">
+            <div class="field">
+              <label>About AI AudioBook</label>
+              <div class="hint">
+                This tool lets you upload your book files and generate audiobooks using AI. All processing happens securely in your browser or on our servers.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Spotify-style player (UI only for now) -->
+      <div class="player-section">
+        <div class="player-card">
+          <div class="cover"></div>
+          <div class="title">Sample Title</div>
+          <div class="artist">Sample Artist</div>
+
+          <div class="controls">
+            <button class="btn" id="playBtn">▶️</button>
+          </div>
+
+          <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+
+          <div class="settings">
+            <span>⚙️ Speed</span>
+            <span>⚙️ AI Voice (WIP)</span>
+            <span>⚙️ Chapters (WIP)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end main-container -->
   </div>
 
   <!-- Simple Guide Section -->
@@ -152,6 +220,7 @@
     </div>
   </section>
   
+  
   <!-- Persistent Bottom Info Section -->
   <section class="bottom-info-section">
     <div class="bottom-info-card">
@@ -169,3 +238,4 @@
 <script src='/static/js/script.js'></script>
 </body>
 </html>
+
