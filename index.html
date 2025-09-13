@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AI AudioBook — Upload</title>
   <meta name="description" content="Upload EPUB, PDF, or TXT files to generate audiobooks. Clean, smooth, browser-optimized interface." />
-  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
   <div class="topbar">
@@ -32,6 +32,7 @@
       </div>
     </div>
   </div>
+
   <div class="wrap">
     <header>
       <div class="logo">AI</div>
@@ -41,8 +42,9 @@
       </div>
     </header>
 
-    <!-- ⬇️ New container to hold upload + player side by side -->
+    <!-- ✅ Only ONE main-container -->
     <div class="main-container">
+
       <!-- LEFT: Upload card -->
       <div class="upload-section">
         <div class="card">
@@ -51,32 +53,9 @@
             <div class="field">
               <label>Upload your book file (EPUB, PDF, or TXT)</label>
               <div id="drop-area" class="drop-area">
-                <span id="drop-area-text">Drop EPUB, PDF, or TXT files here or <span id="choose-file-link" style="color:#4f46e5;cursor:pointer;text-decoration:underline;">press here</span></span>
-                <input id="input-file" type="file" accept=".epub,.pdf,.txt" style="display:none" />
-              </div>
-              <div class="hint" id="file-hint">
-                Supported formats: EPUB, PDF, TXT. Max size: 50MB.
-              </div>
-              <div class="file-error" id="file-error" style="display:none"></div>
-            </div>
-            <div class="field row">
-              <button id="btn-upload" disabled>Upload</button>
-              <button class="ghost" id="btn-clear">Clear</button>
-              <button id="btn-generate-audio" disabled>Generate Audio</button>
-            </div>
-            <ul id="file-list" style="margin-top:12px"></ul>
-          </div>
-    <!-- ⬇️ New container to hold upload + player side by side -->
-    <div class="main-container">
-      <!-- LEFT: Upload card -->
-      <div class="upload-section">
-        <div class="card">
-          <!-- Upload panel -->
-          <div id="panel-upload" class="panel">
-            <div class="field">
-              <label>Upload your book file (EPUB, PDF, or TXT)</label>
-              <div id="drop-area" class="drop-area">
-                <span id="drop-area-text">Drop EPUB, PDF, or TXT files here or <span id="choose-file-link" style="color:#4f46e5;cursor:pointer;text-decoration:underline;">press here</span></span>
+                <span id="drop-area-text">Drop EPUB, PDF, or TXT files here or 
+                  <span id="choose-file-link" style="color:#4f46e5;cursor:pointer;text-decoration:underline;">press here</span>
+                </span>
                 <input id="input-file" type="file" accept=".epub,.pdf,.txt" style="display:none" />
               </div>
               <div class="hint" id="file-hint">
@@ -99,83 +78,35 @@
             </div>
             <div class="hint">No books yet.</div>
           </div>
-          <!-- Library panel -->
-          <div id="panel-library" class="panel" style="display:none">
-            <div class="field">
-              <label>Your uploaded audiobooks will appear here.</label>
-            </div>
-            <div class="hint">No books yet.</div>
-          </div>
 
           <!-- About panel -->
           <div id="panel-about" class="panel" style="display:none">
             <div class="field">
               <label>About AI AudioBook</label>
               <div class="hint">
-                This tool lets you upload your book files and generate audiobooks using AI. All processing happens securely in your browser or on our servers.
+                This tool lets you upload your book files and generate audiobooks using AI. 
+                All processing happens securely in your browser or on our servers.
               </div>
             </div>
           </div>
-        </div>
-      </div>
-            <!-- Create txt file by sigma-->
-            <div id="panel-create" class="panel" style="display:none">
-          <h3>Create TXT</h3>
-          <div class="field">
-            <label for="filename">Name file:</label>
-            <input type="text" id="filename" placeholder="enter-file-name">
-          </div>
-          <div class="field">
-            <label for="content">Content:</label><br>
-            <textarea id="content" rows="6" cols="40" placeholder="enter-content-here"></textarea>
-          </div>
-          <button id="btn-download-txt">Download TXT file</button>
-        </div>
-      <!-- RIGHT: Spotify-style player (UI only for now) -->
-      <div class="player-section">
-        <div class="player-card">
-          <div class="cover"></div>
-          <div class="title">Sample Title</div>
-          <div class="artist">Sample Artist</div>
 
-      <!-- Play panel -->
-      <div id="panel-plays" class="panel" style="display:none">
-        <div class="field">
-          <label>About AI AudioBook</label>
-          <div class="hint">
-            This tool lets you upload your book files and generate audiobooks using AI. All processing happens securely in your browser or on our servers.
-          </div>
-          <div class="controls">
-            <button class="btn" id="playBtn">▶️</button>
-          </div>
-
-          <div class="progress">
-            <div class="progress-bar" id="progressBar"></div>
-          </div>
-
-          <div class="settings">
-            <span>⚙️ Speed</span>
-            <span>⚙️ AI Voice (WIP)</span>
-            <span>⚙️ Chapters (WIP)</span>
-          </div>
-          </div>
-      </div>
-    </div>
-    <!-- end main-container -->
-  </div>
-          <!-- About panel -->
-          <div id="panel-about" class="panel" style="display:none">
+          <!-- Create TXT panel -->
+          <div id="panel-create" class="panel" style="display:none">
+            <h3>Create TXT</h3>
             <div class="field">
-              <label>About AI AudioBook</label>
-              <div class="hint">
-                This tool lets you upload your book files and generate audiobooks using AI. All processing happens securely in your browser or on our servers.
-              </div>
+              <label for="filename">Name file:</label>
+              <input type="text" id="filename" placeholder="enter-file-name">
             </div>
+            <div class="field">
+              <label for="content">Content:</label><br>
+              <textarea id="content" rows="6" cols="40" placeholder="enter-content-here"></textarea>
+            </div>
+            <button id="btn-download-txt">Download TXT file</button>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT: Spotify-style player (UI only for now) -->
+      <!-- RIGHT: Spotify-style player -->
       <div class="player-section">
         <div class="player-card">
           <div class="cover"></div>
@@ -197,8 +128,8 @@
           </div>
         </div>
       </div>
-    </div>
-    <!-- end main-container -->
+
+    </div> <!-- ✅ end main-container -->
   </div>
 
   <!-- Simple Guide Section -->
@@ -219,8 +150,7 @@
       </p>
     </div>
   </section>
-  
-  
+
   <!-- Persistent Bottom Info Section -->
   <section class="bottom-info-section">
     <div class="bottom-info-card">
@@ -235,7 +165,7 @@
       </p>
     </div>
   </section>
-<script src='/static/js/script.js'></script>
+
+  <script src='static/js/script.js'></script>
 </body>
 </html>
-
