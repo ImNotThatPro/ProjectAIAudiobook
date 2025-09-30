@@ -115,10 +115,12 @@ def register(user: UserCreate, db: Session = Depends(database.get_db)):
     db.refresh(new_user)
     return {'msg': 'User created successfully', 'username':new_user.username}
 
+#Create a root to load in login ui and it stuffs
 @app.get('/login', response_class=FileResponse)
 async def login_serve():
     return FileResponse(os.path.join('login.html'))
 
+#Create a root to load in register ui and it stuffs
 @app.get('/register', response_class=FileResponse)
 async def register_serve():
     return FileResponse(os.path.join('register.html'))
